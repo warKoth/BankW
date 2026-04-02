@@ -49,3 +49,8 @@ class RetirerCompteCommand(Command):
         
     def undo(self):
         self._bank.add_compte(self._compte)
+        
+class ExchangeMoneyCommand(Command):
+    def __init__(self, _value:int, _compte1: Compte, _compte2: Compte):
+        self._value = _value
+        self._compte1 = _compte1
