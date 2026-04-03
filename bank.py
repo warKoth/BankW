@@ -70,19 +70,22 @@ class CentralExchangeBank(Subject):
     def __init__(self, nom: str, _identifiant: int):
         self.nom = nom
         self._identifiant = _identifiant
-        self._list_compte = []
+        self._list_compte = {}
 
     @property
     def list_compte(self):
         return self._list_compte
 
-    def add_compte(self, compte: Compte):
-        if compte in self._list_compte:
-            raise ValueError("Le compte existe déjà dans la bank")
+    def add_compte(self, compte: Compte, nom_user: str):
+        if nom_user not in self._list_compte:
+            self._list_compte[nom_user] = [compte]
         else:
-            self._list_compte.append(compte)
-            self.notify("Nouveaux compte", 00)
+            if compte in self._list_compte[nom_user]:
+                raise ValueError("Le compte existe déjà dans la bank")
+            self._list_compte[nom_user].append(compte)
+    
+        self.notify("Nouveaux compte", 00)
 
-    def remove_compte(self, compte: Compte):
-        self._list_compte = [c for c in self._list_compte if c != compte]  
-        self.notify("Suppréssion de compte")
+    def remove_compte(self, comptes: list):
+        self._list_compte = {k: [c for c in v if c not in comptes] for k, v in self._list_compte.items()}
+        self.notify("Suppression de compte")
