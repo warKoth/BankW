@@ -25,8 +25,6 @@ class User:
         
         self.list_compte[nom] = solde
 
-
-
     def delete_compte(self, nom:str):
         actual_mdp_true = input("Mot de passe actuel (Identitifiant si première connexion) ? \n")
         if actual_mdp_true == self._mdp:
