@@ -95,7 +95,7 @@ class DataBaseManager:
             (compte_id,)
         )
         self.cursor.execute(
-            "DELETE FROM compte WHERE compte_id",
+            "DELETE FROM compte WHERE compte_id = ?",
             (compte_id,)
         )
         self.conn.commit()
@@ -113,7 +113,7 @@ class DataBaseManager:
             "SELECT * FROM user_compte WHERE compte_id = ?",
             (compte_id, )
         )
-        self.cursor.fetchall()
+        return self.cursor.fetchall()
 
     def close(self):
         self.conn.close() 
