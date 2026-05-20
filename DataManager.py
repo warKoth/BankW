@@ -24,7 +24,7 @@ class DataBaseManager:
             CREATE TABLE IF NOT EXISTS user (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nom TEXT NOT NULL,
-                mdphash TEXT NOT NULL
+                mdphash BLOB NOT NULL
             )
         ''')
 
@@ -32,7 +32,7 @@ class DataBaseManager:
             CREATE TABLE IF NOT EXISTS compte (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nom TEXT NOT NULL,
-                ref INTEGER NOT NULL,
+                ref TEXT NOT NULL,
                 solde INTEGER,
                 strategie TEXT NOT NULL             
             )                   
@@ -51,7 +51,7 @@ class DataBaseManager:
         self.conn.commit()
 
 
-    def creer_user(self, nom: str, mdphash: str):
+    def creer_user(self, nom: str, mdphash: bytes):
         self.cursor.execute(
             "INSERT INTO user (nom, mdphash) VALUES (?, ?)",
             (nom, mdphash)
@@ -75,14 +75,14 @@ class DataBaseManager:
         )
         self.conn.commit()
 
-    def creer_compte(self, nom: str, ref: int, solde: int, strategie: str):
+    def creer_compte(self, nom: str, ref: str, solde: int, strategie: str):
         self.cursor.execute(
             "INSERT INTO compte (nom, ref, solde, strategie) VALUES (?, ?, ?, ?)",
             (nom, ref, solde, strategie)
         )
         self.conn.commit()
 
-    def get_compte(self, nom: str, ref: int):
+    def get_compte(self, nom: str, ref: str):
         self.cursor.execute(
             "SELECT * FROM compte WHERE nom = ? AND ref = ?",
             (nom, ref)
@@ -95,7 +95,7 @@ class DataBaseManager:
             (compte_id,)
         )
         self.cursor.execute(
-            "DELETE FROM compte WHERE compte_id = ?",
+            "DELETE FROM compte WHERE id = ?",
             (compte_id,)
         )
         self.conn.commit()

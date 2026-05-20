@@ -9,11 +9,9 @@ class User:
         self._mdp_hash = mdp_hash if isinstance(mdp_hash, bytes) else mdp_hash.encode('utf-8')
 
     def verifier_mdp(self, mdp: str) -> bool:
-        import bcrypt
         return bcrypt.checkpw(mdp.encode(), self._mdp_hash)
 
     def changer_mdp(self, ancien_mdp: str, nouveau_mdp: str) -> bool:
-        import bcrypt
         if self.verifier_mdp(ancien_mdp):
             self._mdp_hash = bcrypt.hashpw(nouveau_mdp.encode(), bcrypt.gensalt())
             return True
@@ -43,7 +41,7 @@ class UserManager:
         self._users[nom] = user
         return user
     
-    def connexion(self, nom: str, mdphash: str) -> User:
+    def connexion(self, nom: str, mdp: str) -> User:
         if nom in self._users: #si le user est en cache 
             user = self._users[nom]
         else: #verification server
@@ -53,7 +51,7 @@ class UserManager:
             user = User(data[0], data[1], data[2])
             self._users[nom] = user 
 
-        if not bcrypt.checkpw(mdphash.encode(), user._mdp_hash):# check mot de passe
+        if not bcrypt.checkpw(mdp.encode(), user._mdp_hash):# check mot de passe
             raise ValueError("Mot de passe incorrect")
 
         self._log.log("Connexion", f"{nom} connecté")
@@ -64,8 +62,8 @@ class UserManager:
         if data is None:
             raise ValueError("Utilisateur introuvable !")
         
-        mdphash_bytes = str(data[2]).encode('utf-8')
-        if not bcrypt.checkpw(mdp.encode(), mdphash_bytes):
+        mdphash_db = data[2]
+        if not bcrypt.checkpw(mdp.encode(), mdphash_db):
             raise ValueError("Mot de passe incorrect !")
     
         user_id = data[0]

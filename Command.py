@@ -38,7 +38,7 @@ class AjouterCompteCommand(Command):
         self._bank.add_compte(self._compte, self._nom_user)
         
     def undo(self):
-        self._bank.remove_compte(self._compte)
+        self._bank.remove_compte(self._compte, self._nom_user)
         
 class RetirerCompteCommand(Command):
     def __init__(self, _bank: CentralExchangeBank, _nom_user: str, _compte: Compte):

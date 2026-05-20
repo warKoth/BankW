@@ -180,11 +180,11 @@ class Compte(Subject):
     def solde(self):
         return self._solde
 
-    @solde.setter
+    """@solde.setter
     def solde(self, value):
         if value < 0:
             raise ValueError("Le solde ne peut pas être négatif")
-        self._solde = value
+        self._solde = value"""
 
     def appliquer_strategy(self, strategie):
         if isinstance(strategie, Strategy):
@@ -215,6 +215,7 @@ class Compte(Subject):
 
 class CentralExchangeBank(Subject):
     def __init__(self, nom: str, _identifiant: int):
+        super().__init__()
         self.nom = nom
         self._identifiant = _identifiant
         self._list_compte = {}
@@ -223,7 +224,7 @@ class CentralExchangeBank(Subject):
     def list_compte(self):
         return self._list_compte
 
-    def add_compte(self, compte: Compte, nom_user: list):
+    def add_compte(self, compte: Compte, nom_user: str):
         if nom_user not in self._list_compte:
             self._list_compte[nom_user] = [compte]
         else:
@@ -233,6 +234,12 @@ class CentralExchangeBank(Subject):
     
         self.notify("Nouveaux compte", 00)
 
-    def remove_compte(self, comptes: list):
-        self._list_compte = {k: [c for c in v if c not in comptes] for k, v in self._list_compte.items()}
+    def remove_compte(self, comptes: list, nom_user: str):
+        if nom_user not in self._list_compte:
+            raise ValueError("Utilisateur inconnu")
+        
+        if comptes not in self._list_compte[nom_user]:
+            raise ValueError("Comptes introuvable pour cette utilisateur")
+        
+        self._list_compte[nom_user] = [c for c in self._list_compte[nom_user] if c is not comptes]
         self.notify("Suppression de compte", 1)
