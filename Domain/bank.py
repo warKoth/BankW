@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-from DataManager import LogManager
+from Domain.DataManager import LogManager
 
 
 class Strategy(ABC):

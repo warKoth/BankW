@@ -1,4 +1,4 @@
-import Command
+import Domain.Command as Command
 
 class invoker:
 

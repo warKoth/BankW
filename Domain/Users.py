@@ -1,4 +1,4 @@
-from DataManager import DataBaseManager, LogManager
+from Domain.DataManager import DataBaseManager, LogManager
 import bcrypt
 from typing import Union
 

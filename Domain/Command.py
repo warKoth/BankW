@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from bank import Compte, CentralExchangeBank
+from Domain.bank import Compte, CentralExchangeBank
 
 class Command(ABC):
     @abstractmethod
