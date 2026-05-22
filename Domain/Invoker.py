@@ -1,6 +1,6 @@
-import Domain.Command as Command
+from Command import *
 
-class invoker:
+class Invoker:
 
     def __init__(self):
         self._historique = []
